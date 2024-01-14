@@ -21,7 +21,6 @@ export const newUser = TryCatch(async (req: Request<{}, {}, NewUserRequestBody>,
         return next(new ErrorHandler('Please provide all values', 400));
 
 
-
     user = await User.create({
         name,
         email,

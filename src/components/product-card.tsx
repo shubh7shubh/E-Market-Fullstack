@@ -9,7 +9,7 @@ type ProductsProps = {
   handler: () => void;
 };
 
-const server = "sjdhfasd"
+// const server = "sjdhfasd"
 
 const ProductCard = ({
   productId,
@@ -21,7 +21,7 @@ const ProductCard = ({
 }: ProductsProps) => {
   return (
     <div className="product-card">
-      <img src={photo} alt={name} />
+      <img src={`${import.meta.env.VITE_SERVER}/${photo}`} alt={name} />
       <p>{name}</p>
       <span>₹{price}</span>
 
