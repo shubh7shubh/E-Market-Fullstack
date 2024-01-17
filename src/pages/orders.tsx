@@ -1,7 +1,14 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { Column } from "react-table";
 import TableHOC from "../components/admin/TableHOC";
-import { Link } from "react-router-dom";
+import { Skeleton } from "../components/loader";
+import { useMyOrdersQuery } from "../redux/api/orderApi";
+import { CustomError } from "../types/api-types";
+import { UserReducerIntialState } from "../types/reducer-types";
+import { RootState } from "../redux/store";
 
 type DataType = {
     _id: string;
@@ -42,15 +49,47 @@ const column: Column<DataType>[] = [
 
 const Orders = () => {
 
-    const [rows] = useState<DataType[]>([{
-        _id: "hdfsakdf",
-        amount: 1000,
-        quantity: 20,
-        discount: 200,
-        status: <span className="red">Processing</span>,
-        action: <Link to={`/order/hdfsakdf`}>VIew</Link>
 
-    }])
+
+    const { user } = useSelector((state: RootState) => state.userReducer);
+
+    const { isLoading, isError, error, data } = useMyOrdersQuery(user?._id!)
+
+
+    if (isError) {
+        const err = error as CustomError
+        toast.error(err.data.message)
+    }
+
+    useEffect(() => {
+        console.log(data);
+        if (data) {
+            setRows(data.orders?.map((i) => ({
+                _id: i._id,
+                amount: i.total,
+                discount: i.discount,
+                quantity: i.orderItems.length,
+                status: (
+                    <span
+                        className={
+                            i.status === "Processing"
+                                ? "red"
+                                : i.status === "Shipped"
+                                    ? "green"
+                                    : "purple"
+                        }
+                    >
+                        {i.status}
+                    </span>
+                ),
+                action: <Link to={`/admin/transaction/${i._id}`}>Manage</Link>
+
+            })));
+        }
+    }, [data]);
+
+
+    const [rows, setRows] = useState<DataType[]>([])
 
 
 
@@ -72,8 +111,7 @@ const Orders = () => {
     return (
         <div className="container">
             <h1>My Orders</h1>
-            {/* {isLoading ? <Skeleton length={20} /> : Table} */}
-            {Table}
+            {isLoading ? <Skeleton length={20} /> : Table}
         </div>
     )
 }

@@ -13,6 +13,7 @@ import ProtectedRoute from "./components/protected-route";
 
 
 
+
 const Home = lazy(() => import("./pages/home"));
 const Cart = lazy(() => import("./pages/cart"));
 const Search = lazy(() => import("./pages/search"));
@@ -20,6 +21,8 @@ const Shipping = lazy(() => import("./pages/shipping"));
 const Login = lazy(() => import("./pages/login"));
 const Orders = lazy(() => import("./pages/orders"));
 const OrderDetails = lazy(() => import("./pages/order-details"));
+const NotFound = lazy(() => import("./pages/not-found"));
+const Checkout = lazy(() => import("./pages/checkout"))
 
 
 // Admin Routes 
@@ -87,6 +90,7 @@ const App = () => {
             <Route path="/shipping" element={<Shipping />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/order/:id" element={<OrderDetails />} />
+            <Route path="/pay" element={<Checkout />} />
           </Route>
 
 
@@ -119,8 +123,8 @@ const App = () => {
             <Route path="/admin/product/:id" element={<ProductManagement />} />
 
             <Route path="/admin/transaction/:id" element={<TransactionManagement />} />
-          </Route>;
-
+          </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
       <Toaster position="bottom-center" />
