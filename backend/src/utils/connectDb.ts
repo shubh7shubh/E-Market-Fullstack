@@ -1,7 +1,12 @@
 import mongoose from 'mongoose';
 
 export const connectDb = async () => {
-    mongoose.connect("mongodb+srv://emarket24:senpai69@cluster0.beob0mj.mongodb.net/", {
-        dbName: 'E-market_24',
-    }).then(c => console.log(`Db connected to ${c.connection.host}`))
-}
+    try {
+        await mongoose.connect('mongodb+srv://kosevimit:PkKVHiIho6EM9n5l@cluster0.z9lflhi.mongodb.net/'); // Type assertion for ConnectOptions
+        console.log('Connected to MongoDB Atlas');
+    } catch (error: any) { // Specify 'any' type for the error object
+        console.error('Error connecting to MongoDB Atlas:', error.message);
+        // Exit process if connection fails
+        process.exit(1);
+    }
+};
